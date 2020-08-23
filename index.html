@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Temperature Hot</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        background: url(images/bg.jpg) no-repeat;
+        background-size: cover;
+        height: 100vh;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <form class="col-md-6 m-auto py-5">
+        <div class="input-group mb-3">
+          <input
+            id="city-input"
+            type="text"
+            class="form-control"
+            placeholder="Enter a location for Weather ..."
+          />
+          <div class="input-group-append">
+            <button id="search-button" type="button" class="btn btn-danger">
+              Search
+            </button>
+          </div>
+        </div>
+      </form>
+      <div class="weather-status text-white text-center">
+        <img src="https://openweathermap.org/img/wn/02d@2x.png" alt="" />
+        <h1 id="city-name"></h1>
+        <h3><span id="show_temperature">0</span>&deg;C</h3>
+        <h1 id="weather_status" class="lead"></h1>
+      </div>
+    </div>
+
+    <script>
+      const api = {
+        key: "8261018519dc2d6ba11c22de0f82e5f3",
+        base: "https://api.openweathermap.org/data/2.5/weather",
+      };
+      const getWeatherData = (city) => {
+        const url = `${api.base}?q=${city}&units=metric&appid=${api.key}`;
+        fetch(url)
+          .then((response) => response.json())
+          .then((data) => updateUI(data));
+      };
+      const searchBtn = document.getElementById("search-button");
+      searchBtn.addEventListener("click", function () {
+        const inputCity = document.getElementById("city-input").value;
+        getWeatherData(inputCity);
+      });
+      const updateUI = (data) => {
+        document.getElementById("city-name").innerText =
+          data.name || "Unknown Location!";
+        document.getElementById("show_temperature").innerText = data.main.temp;
+        document.getElementById("weather_status").innerText =
+          data.weather[0].main;
+
+        document.getElementById("city-input").value = "";
+      };
+      getWeatherData("Dhaka");
+    </script>
+  </body>
+</html>
